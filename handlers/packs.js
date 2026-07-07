@@ -1,0 +1,342 @@
+const StegCloak = require('stegcloak')
+const Markup = require('telegraf/markup')
+const { escapeHTML } = require('../utils')
+const { sendBanner, editBanner } = require('../banners')
+
+const stegcloak = new StegCloak(false, false)
+
+module.exports = async (ctx) => {
+  const { userInfo } = ctx.session
+
+  // if its in group
+  if (ctx.chat.type !== 'private') {
+    const replyMarkup = Markup.inlineKeyboard([
+      Markup.switchToCurrentChatButton(ctx.i18n.t('cmd.packs.select_group_pack'), 'select_group_pack')
+    ])
+
+    return ctx.replyWithHTML(ctx.i18n.t('cmd.packs.select_group_pack_info'), {
+      reply_markup: replyMarkup,
+      reply_to_message_id: ctx.message.message_id,
+      allow_sending_without_reply: true
+    })
+  }
+
+  if (!userInfo) ctx.session.userInfo = await ctx.db.User.getData(ctx.from)
+
+  let packType = userInfo.stickerSet?.packType || 'regular'
+  if (userInfo.stickerSet?.inline || ctx.state.type) packType = 'inline'
+
+  if (ctx.callbackQuery && ctx.match && ctx.match[1] === 'type') {
+    if (ctx.match[2] === 'inline') {
+      const findStickerSet = await ctx.db.StickerSet.findOne({
+        owner: userInfo.id,
+        deleted: { $ne: true },
+        inline: true
+      }).sort({
+        updatedAt: -1
+      })
+
+      if (findStickerSet) {
+        userInfo.stickerSet = findStickerSet
+        userInfo.inlineStickerSet = findStickerSet
+        userInfo.inlineType = 'packs'
+      } else {
+        userInfo.stickerSet = null
+      }
+
+      packType = 'inline'
+    } else {
+      const findStickerSet = await ctx.db.StickerSet.findOne({
+        owner: userInfo.id,
+        deleted: { $ne: true },
+        packType: ctx.match[2]
+      }).sort({
+        updatedAt: -1
+      })
+
+      if (findStickerSet) {
+        userInfo.stickerSet = findStickerSet
+      } else {
+        userInfo.stickerSet = null
+      }
+
+      packType = ctx.match[2]
+    }
+  }
+
+  const query = {
+    owner: userInfo.id,
+    create: true,
+    hide: { $ne: true }
+  }
+
+  let page = 0
+  const limit = 10
+
+  if (ctx.callbackQuery) {
+    page = parseInt(ctx.match[1]) || 0
+  }
+  if (page < 0) page = 0
+
+  if (ctx.callbackQuery && ctx.match && ctx.match[1] === 'set_pack') {
+    if (ctx.match[2] === 'gif') {
+      ctx.session.userInfo.inlineType = 'gif'
+      if (userInfo?.stickerSet?.inline) userInfo.stickerSet = null
+      userInfo.inlineStickerSet = null
+    } else {
+      const stickerSet = await ctx.db.StickerSet.findById(ctx.match[2])
+
+      if (!stickerSet) {
+        return ctx.answerCbQuery(ctx.i18n.t('callback.pack.answerCbQuer.not_found'), true)
+      }
+
+      packType = stickerSet.inline ? 'inline' : stickerSet.packType
+
+      stickerSet.updatedAt = new Date()
+      await ctx.db.StickerSet.updateOne({ _id: stickerSet._id }, { updatedAt: stickerSet.updatedAt })
+
+      if (stickerSet?.owner.toString() === userInfo.id.toString()) {
+        await ctx.answerCbQuery()
+
+        if (stickerSet.inline) {
+          ctx.session.userInfo.inlineType = 'packs'
+          userInfo.inlineStickerSet = stickerSet
+        }
+
+        userInfo.stickerSet = stickerSet
+
+        const btnName = stickerSet.hide === true ? 'callback.pack.btn.restore' : 'callback.pack.btn.hide'
+
+        if (stickerSet.inline) {
+          await ctx.replyWithHTML(ctx.i18n.t('callback.pack.set_inline_pack', {
+            title: escapeHTML(stickerSet.title),
+            botUsername: ctx.options.username
+          }), {
+            reply_markup: Markup.inlineKeyboard([
+              [
+                Markup.switchToChatButton(ctx.i18n.t('callback.pack.btn.use_pack'), '')
+              ],
+              [
+                Markup.callbackButton(ctx.i18n.t(btnName), `hide_pack:${stickerSet.id}`)
+              ]
+            ]),
+            parse_mode: 'HTML'
+          })
+        } else {
+          let inlineData = ''
+          if (ctx.session.userInfo.inlineType === 'packs') {
+            inlineData = stegcloak.hide('{gif}', '', ' : ')
+          }
+
+          const searchGifButton = [Markup.switchToCurrentChatButton(ctx.i18n.t('callback.pack.btn.search_gif'), inlineData)]
+
+          let coeditButton = []
+
+          if (stickerSet.owner.toString() === userInfo.id.toString()) {
+            coeditButton = [Markup.callbackButton(ctx.i18n.t('callback.pack.btn.coedit'), `coedit:${stickerSet.id}`)]
+          }
+
+          let catalogButton = []
+
+          const stickersCount = await ctx.db.Sticker.countDocuments({
+            stickerSet: stickerSet.id,
+            deleted: false
+          })
+
+          if (stickerSet.public) {
+            catalogButton = [
+              [
+                Markup.callbackButton(ctx.i18n.t('callback.pack.btn.catalog_edit'), `catalog:publish:${stickerSet.id}`),
+                Markup.callbackButton(ctx.i18n.t('callback.pack.btn.catalog_delete'), `catalog:unpublish:${stickerSet.id}`)
+              ],
+              [
+                Markup.urlButton(ctx.i18n.t('callback.pack.btn.catalog_share'), `https://t.me/share/url?url=https://t.me/${ctx.options.username}/catalog?startapp=set=${stickerSet.name}`),
+                Markup.urlButton(ctx.i18n.t('callback.pack.btn.catalog_open'), `https://t.me/${ctx.options.username}/catalog?startApp=set=${stickerSet.name}&startapp=set=${stickerSet.name}`)
+              ]
+            ]
+          } else if (stickersCount >= 10 && !stickerSet.public) {
+            catalogButton = [[Markup.callbackButton(ctx.i18n.t('callback.pack.btn.catalog_add'), `catalog:publish:${stickerSet.id}`)]]
+          }
+
+          const linkPrefix = stickerSet.packType === 'custom_emoji' ? ctx.config.emojiLinkPrefix : ctx.config.stickerLinkPrefix
+
+          const boostText = ctx.i18n.t('callback.pack.boost.info', {
+            botUsername: ctx.options.username,
+            boostStatus: stickerSet.boost ? ctx.i18n.t('callback.pack.boost.status.on') : ctx.i18n.t('callback.pack.boost.status.off')
+          })
+
+          await ctx.replyWithHTML(ctx.i18n.t('callback.pack.set_pack', {
+            title: escapeHTML(stickerSet.title),
+            link: `${linkPrefix}${stickerSet.name}`
+          }) + boostText, {
+            disable_web_page_preview: true,
+            reply_markup: Markup.inlineKeyboard([
+              [
+                Markup.urlButton(ctx.i18n.t('callback.pack.btn.use_pack'), `${linkPrefix}${stickerSet.name}`)
+              ],
+              [
+                Markup.callbackButton(ctx.i18n.t('callback.pack.btn.boost'), `boost:${stickerSet.id}`, stickerSet.boost)
+              ],
+              [
+                Markup.callbackButton(ctx.i18n.t('callback.pack.btn.rename'), `rename_pack:${stickerSet.id}`)
+              ],
+              [
+                Markup.callbackButton(ctx.i18n.t('callback.pack.btn.frame'), 'set_frame')
+              ],
+              ...(stickerSet.packType === 'custom_emoji'
+                ? [[Markup.callbackButton(ctx.i18n.t('callback.pack.btn.mosaic'), 'mosaic:enter')]]
+                : []
+              ),
+              searchGifButton,
+              coeditButton,
+              ...catalogButton,
+              [
+                Markup.callbackButton(ctx.i18n.t(btnName), `hide_pack:${stickerSet.id}`)
+              ]
+            ]),
+            parse_mode: 'HTML'
+          })
+        }
+      } else {
+        await ctx.answerCbQuery(ctx.i18n.t('callback.pack.answerCbQuer.not_owner'), true)
+      }
+    }
+  }
+
+  if (packType === 'inline') {
+    query.inline = true
+  } else {
+    query.inline = { $ne: true }
+    if (packType === 'regular') {
+      query.packType = {
+        $in: [packType, null]
+      }
+    } else {
+      query.packType = packType
+    }
+  }
+
+  // Fetch limit+1 to check if there's a next page (avoids separate countDocuments query)
+  const stickerSets = await ctx.db.StickerSet.find(query)
+    .sort({ updatedAt: -1 })
+    .limit(limit + 1)
+    .skip(page * limit)
+    .lean()
+
+  const hasNextPage = stickerSets.length > limit
+  if (hasNextPage) stickerSets.pop()
+
+  // Use cached count from user document, fallback to countDocuments for old users
+  let totalCount = userInfo.packsCount?.[packType] ?? 0
+  if (totalCount === 0 && stickerSets.length > 0) {
+    // Fallback for users without packsCount (lazy migration)
+    totalCount = await ctx.db.StickerSet.countDocuments(query)
+    // Save for future requests (non-blocking)
+    if (!userInfo.packsCount) userInfo.packsCount = {}
+    userInfo.packsCount[packType] = totalCount
+    ctx.db.User.updateOne(
+      { _id: userInfo._id },
+      { $set: { [`packsCount.${packType}`]: totalCount } }
+    ).then(() => {})
+  }
+
+  if (packType === 'inline' && stickerSets.length <= 0) {
+    let inlineSet = await ctx.db.StickerSet.findOne({
+      owner: userInfo.id,
+      inline: true
+    })
+
+    if (!inlineSet) {
+      inlineSet = await ctx.db.StickerSet.newSet({
+        owner: userInfo.id,
+        ownerTelegramId: ctx.from.id,
+        name: 'inline_' + ctx.from.id,
+        title: ctx.i18n.t('cmd.packs.inline_title'),
+        emojiSuffix: '💫',
+        create: true,
+        inline: true
+      })
+    }
+
+    stickerSets.unshift(inlineSet)
+  }
+
+  let messageText = ''
+  const keyboardMarkup = []
+
+  if (stickerSets.length > 0) {
+    const totalPages = Math.ceil(totalCount / limit)
+    const statsText = totalCount > limit
+      ? `\n<i>${page + 1}/${totalPages} (${totalCount})</i>\n`
+      : ''
+    messageText = ctx.i18n.t('cmd.packs.info') + statsText
+
+    stickerSets.forEach((pack) => {
+      let { title } = pack
+
+      // if (pack.video === true) title = `📹 ${title}`
+      // else if (pack.animated === true) title = `✨ ${title}`
+      // else if (pack.inline === true) title = `💫 ${title}`
+      // else title = `🌟 ${title}`
+
+      if (
+        userInfo.stickerSet?._id?.toString() === pack._id.toString()
+      ) title += ' ✅'
+
+      keyboardMarkup.push([Markup.callbackButton(title, `set_pack:${pack._id}`)])
+    })
+  } else {
+    messageText = ctx.i18n.t('cmd.packs.empty')
+  }
+
+  if (packType === 'inline') {
+    const title = ctx.session.userInfo.inlineType !== 'gif' ? 'GIF' : '✅ GIF'
+    keyboardMarkup.push([Markup.callbackButton(title, 'set_pack:gif')])
+  }
+
+  const paginationKeyboard = []
+
+  if (page > 0) {
+    paginationKeyboard.push(Markup.callbackButton(`‹ ${page}`, `packs:${page - 1}`))
+  }
+  if (hasNextPage) {
+    paginationKeyboard.push(Markup.callbackButton(`${page + 2} ›`, `packs:${page + 1}`))
+  }
+
+  keyboardMarkup.push(paginationKeyboard)
+
+  keyboardMarkup.push([
+    Markup.callbackButton(
+      (packType === 'regular' ? '✅ ' : '') +
+      ctx.i18n.t('cmd.packs.types.regular'),
+      'packs:type:regular'
+    ),
+    Markup.callbackButton(
+      (packType === 'custom_emoji' ? '✅ ' : '') +
+      ctx.i18n.t('cmd.packs.types.custom_emoji'),
+      'packs:type:custom_emoji'
+    ),
+    Markup.callbackButton(
+      (packType === 'inline' ? '✅ ' : '') +
+      ctx.i18n.t('cmd.packs.types.inline'),
+      'packs:type:inline'
+    )
+  ])
+
+  keyboardMarkup.push([Markup.callbackButton(ctx.i18n.t('cmd.start.btn.new'), `new_pack:${packType}`)])
+
+  const replyMarkup = Markup.inlineKeyboard(keyboardMarkup)
+
+  if (ctx.updateType === 'message') {
+    await sendBanner(ctx, 'packs', messageText, {
+      reply_to_message_id: ctx.message.message_id,
+      allow_sending_without_reply: true,
+      reply_markup: replyMarkup
+    })
+  } else if (ctx.updateType === 'callback_query') {
+    // Swap whatever banner was shown (welcome, or packs from a prior nav) to
+    // the packs banner + updated caption/keyboard. editBanner internally uses
+    // editMessageMedia, which works whether the prior message is text or photo.
+    await editBanner(ctx, 'packs', messageText, { reply_markup: replyMarkup })
+  }
+}

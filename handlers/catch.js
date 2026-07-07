@@ -1,0 +1,136 @@
+const fs = require('fs')
+const path = require('path')
+const util = require('util')
+const execFile = util.promisify(require('child_process').execFile)
+const errorStackParser = require('error-stack-parser')
+const { escapeHTML, isRateLimitError, getRetryAfter } = require('../utils')
+const log = require('../utils/logger').scope('error-handler')
+
+// Probe once at module load: is .git available at project root?
+// Skip git blame entirely in environments without .git (e.g. Docker deploys)
+// to avoid spawning a failing git process on every error.
+const PROJECT_ROOT = path.resolve(__dirname, '..')
+const HAS_GIT_DIR = (() => {
+  try {
+    return fs.existsSync(path.join(PROJECT_ROOT, '.git'))
+  } catch (e) {
+    return false
+  }
+})()
+
+/**
+ * Pick the first stack frame that's inside the project AND not in
+ * node_modules — git blame against node_modules always fails with
+ * "no such path in HEAD" and spams the logs.
+ */
+function pickBlameFrame (errorInfo) {
+  for (const frame of errorInfo) {
+    const file = frame.fileName
+    if (!file || typeof file !== 'string') continue
+    if (!file.startsWith(PROJECT_ROOT)) continue
+    if (file.includes(`${path.sep}node_modules${path.sep}`)) continue
+    if (!frame.lineNumber) continue
+    return frame
+  }
+  return null
+}
+
+async function errorLog (error, ctx) {
+  const errorInfo = errorStackParser.parse(error)
+
+  let gitBlame
+  const frame = HAS_GIT_DIR ? pickBlameFrame(errorInfo) : null
+
+  if (frame) {
+    // Silent on failure — any noise here would fire on every caught
+    // error in prod and drown out real signals.
+    gitBlame = await execFile(
+      'git',
+      ['blame', '-L', `${frame.lineNumber},${frame.lineNumber}`, '--', frame.fileName],
+      { timeout: 2000, cwd: PROJECT_ROOT }
+    ).catch(() => null)
+  }
+
+  let errorText = `<b>error for ${ctx.updateType}:</b>`
+  if (ctx.match) errorText += `\n<code>${ctx.match[0]}</code>`
+  if (ctx.from && ctx.from.id) errorText += `\n\nuser: <a href="tg://user?id=${ctx.from.id}">${escapeHTML(ctx.from.first_name)}</a> #user_${ctx.from.id}`
+  if (ctx?.session?.chainActions && ctx?.session.chainActions.length > 0) errorText += '\n\n🔗 ' + ctx?.session.chainActions.map(v => `<code>${v}</code>`).join(' ➜ ')
+
+  if (gitBlame && !gitBlame.stderr) {
+    const parsedBlame = gitBlame.stdout.match(/^(?<SHA>[0-9a-f]+)\s+\((?<USER>.+)(?<DATE>\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{4}\s+)(?<line>\d+)\) ?(?<code>.*)$/m)
+
+    if (parsedBlame?.groups) {
+      errorText += `\n\n<u>${parsedBlame.groups.USER.trim()}</u>`
+      errorText += `\n<i>commit:</i> ${parsedBlame.groups.SHA}`
+      errorText += `\n\n<code>${parsedBlame.groups.code}</code>`
+    }
+  }
+
+  errorText += `\n\n\n<code>${escapeHTML(error.stack)}</code>`
+
+  if (error.description && error.description.includes('timeout')) return
+
+  if (!ctx.config) return log.error(errorText)
+
+  await ctx.telegram.sendMessage(ctx.config.logChatId, errorText, {
+    parse_mode: 'HTML'
+  }).catch((error) => {
+    log.error('send log error:', error)
+  })
+
+  if (ctx?.chat?.type === 'private') {
+    await ctx.replyWithHTML(ctx.i18n.t('error.unknown')).catch(() => {})
+  }
+}
+
+// Errors that aren't actionable — we expect them in normal operation
+// and logging each one just drowns out real signals.
+function isExpectedNoise (error) {
+  if (!error) return false
+
+  // retry-api short-circuited a send to a blocked user — already handled
+  if (error.__cachedBlock) return true
+
+  // retry-api short-circuited a 429 cooldown — already logged once when
+  // Telegram first told us retry_after > maxWait, every subsequent call
+  // in the same window is the same story.
+  if (error.__cachedRateLimit) return true
+
+  const method = error?.on?.method
+  const description = error?.description || ''
+
+  // answerCallbackQuery expiry: callback_query_id has a ~5–10 min TTL
+  // at Telegram. Handlers with handlerTimeout=60s rarely overrun this
+  // directly, but a handler that sleeps on a 429 retry + does slow I/O
+  // can. When it eventually answers, Telegram replies 400 "query is
+  // too old". Not actionable — user already saw the button press.
+  if (method === 'answerCallbackQuery' && /query is too old|query ID is invalid/i.test(description)) {
+    return true
+  }
+
+  return false
+}
+
+module.exports = async (error, ctx) => {
+  if (isExpectedNoise(error)) return
+
+  log.error(error?.stack || error)
+
+  // Handle 429 rate limit errors gracefully.
+  // Note: withRetry already logs `[Retry] 429 on <method>` — no dup here.
+  if (isRateLimitError(error)) {
+    const retryAfter = getRetryAfter(error)
+
+    if (ctx?.chat?.type === 'private') {
+      const waitText = retryAfter
+        ? ctx.i18n.t('error.rate_limit_seconds', { seconds: retryAfter })
+        : ctx.i18n.t('error.rate_limit')
+      await ctx.replyWithHTML(waitText).catch(() => {})
+    }
+    return
+  }
+
+  errorLog(error, ctx).catch(e => {
+    log.error('errorLog itself failed:', e?.stack || e)
+  })
+}
