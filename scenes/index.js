@@ -1,0 +1,98 @@
+const Stage = require('telegraf/stage')
+const I18n = require('telegraf-i18n')
+const {
+  handleStart
+} = require('../handlers')
+
+const { match } = I18n
+
+const broadcast = require('./broadcast')
+const sceneNewPack = require('./pack-new')
+const originalSticker = require('./sticker-original')
+const deleteSticker = require('./sticker-delete')
+const packEdit = require('./admin-pack')
+const adminPackBulkDelete = require('./admin-pack-bulk-delete')
+const searchStickerSet = require('./pack-search')
+const photoClear = require('./photo-clear')
+const videoRound = require('./video-round')
+const packCatalog = require('./pack-catalog')
+const packFrame = require('./pack-frame')
+const packRename = require('./pack-rename')
+const packDelete = require('./pack-delete')
+const packAbout = require('./pack-about')
+const donate = require('./donate')
+const mosaic = require('./mosaic')
+
+const stage = new Stage([].concat(
+  sceneNewPack,
+  originalSticker,
+  deleteSticker,
+  broadcast,
+  packEdit,
+  adminPackBulkDelete,
+  searchStickerSet,
+  photoClear,
+  videoRound,
+  packCatalog,
+  packFrame,
+  packRename,
+  packDelete,
+  packAbout,
+  donate,
+  mosaic
+))
+
+stage.use((ctx, next) => {
+  if (!ctx.session.scene) ctx.session.scene = {}
+  return next()
+})
+
+stage.hears(([
+  '/cancel',
+  match('scenes.btn.cancel')
+]), async (ctx) => {
+  ctx.session.scene = null
+
+  await ctx.reply(ctx.i18n.t('scenes.leave'), {
+    reply_markup: {
+      remove_keyboard: true
+    },
+    reply_to_message_id: ctx.message.message_id,
+    allow_sending_without_reply: true
+  })
+  await ctx.scene.leave()
+
+  return handleStart(ctx)
+})
+
+stage.hears(([
+  '/start',
+  '/admin',
+  '/help',
+  '/packs',
+  '/new',
+  '/emoji',
+  '/lang',
+  '/donate',
+  '/publish',
+  '/delete',
+  '/frame',
+  '/catalog',
+  '/mosaic',
+  '/round',
+  '/clear',
+  '/copy',
+  '/restore',
+  '/original',
+  '/about',
+  '/report',
+  '/privacy',
+  '/paysupport'
+]), async (ctx, next) => {
+  await ctx.scene.leave()
+  ctx.session.scene = null
+  await next()
+})
+stage.middleware()
+
+module.exports = stage
