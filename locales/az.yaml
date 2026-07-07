@@ -1,0 +1,718 @@
+---
+language_name: '🇦🇿 Azərbaycanca'
+name: fStik — Stikerlər və Emoji
+description:
+  long: |
+    Foto, video və GIF-lərdən çevirmə olmadan stikerlər və emoji yaradın!
+
+    Xüsusiyyətlər:
+    • Asan paket idarəsi
+    • Video stikerlər və fərdi emoji
+    • Orijinal faylları yükləmək
+    • Stiker/video/GIF-i şəkilə çevirmək
+    • Stikerlər kataloqu
+
+    Stiker axtar: play.google.com/store/apps/details?id=app.fstik 🇺🇦
+  short: |
+    Foto, video, GIF'lərdən stiker və emoji yaradın. Katalog və axtarış. 🇺🇦
+ratelimit: Çox vaxt deyil!
+cmd:
+  start:
+    enter: |
+      🧙 Salam, ${name}! Mən emoji və stiker paketi sehrbazıyam.
+      Mən bir neçə kliklə şəkillərinizi, videolarınızı və GIF-lərinizi gözəl stikerlərə çevirə bilərəm
+
+      Nə edə biləcəyim haqqında ətraflı öyrənmək üçün /help əmrini göndərin
+
+      💬 Yardım lazımdır? @fStikCommunity ünvanında dəstək söhbətimizə qoşulun (yalnız ingiliscə)
+    group: |
+      🧙 Salam, ${groupTitle}! Mən emoji və stiker paketləri sehrbazıyam.
+
+      Bir stikerı qrup paketinə əlavə etmək üçün, foto, video, gif və ya stikerə cavab olaraq /ss əmrdən istifadə edin.
+    catalog: |
+      <b>😻 Siz yeni stiker paketlərini kataloqumuzda tapa bilərsiniz</b>
+
+      • Aşağıdakı düyməyə klikləyin və hər zövqə uyğun stiker paketlərinin böyük kataloquna daxil olun
+      • Axtarın açar sözlər və ya hazırlanmış tablarda
+      • Reytinqlərdə stiker paketini tanıtmaq və ya aşağı salmaq üçün qiymət verməyi unutmayın
+    commands:
+      ss: '🌟 Stikeri yadda saxlayın'
+      start: '📜 Start menyu'
+      help: '📖 Istinad'
+      packs: '📁 Paketləri idarə edin'
+      new: '🌝 Etiket paketi yaradın'
+      catalog: '📖 Kataloq'
+      publish: '📤 Paketi dərc edin'
+      delete: '❌ Stikeri silin'
+      original: '🔍 Orijinal stiker tap'
+      restore: '🔀 Paketi bərpa edin'
+      copy: '📋 Paketi kopyalayın'
+      emoji: '📝 Emoji şəkilçisini dəyişdirin'
+      round: '🎥 Dairəvi formalı video'
+      clear: '🖼️ Şəkildən fonu silin'
+      about: '📦 Paket məlumatı'
+      user_about: '🧑‍🎨 Yaradıcı məlumatı'
+      lang: '🌐 Dili dəyişdirin'
+      report: '🚨 Şikayət paketi'
+      donate: '☕️ İnkişaf etdiricini dəstəkləyin'
+      add_to_group: '👥 Qrupa əlavə edin'
+      privacy: '🔒 Məxfilik siyasəti'
+    btn:
+      new: '📥 Yenisi yaradın'
+      catalog: '💖 Kataloqu açın'
+      catalog_mini: '💖 Kataloq'
+      catalog_browser: '🌐 Brauzerdə açın'
+      catalog_browser_mini: '🌐 Brauzerdə'
+      catalog_app: '📱 Android proqramını yükləyin'
+      catalog_app_mini: '📱 Android proqramı'
+  inline:
+    switch_pm: '📁 Paketi seçin'
+  restore: |
+    <b>🗃 Paketin bərpası</b>
+
+    Paketi bərpa etmək üçün siz mənə bərpa etmək istədiyiniz paketin linkini göndərməlisiniz
+  copy: |
+    <b>🗄 Paketi kopyalayın</b>
+
+    Başqa paketi yenisinə köçürmək üçün sadəcə mənə stiker və ya emoji paketinə keçid göndərməlisiniz
+  report: |
+    <b>🚨 Şikayət edin</b>
+
+    Qanunu poza biləcəyini və ya Telegram-ın Xidmət Şərtlərinə zidd olduğunu düşündüyünüz stiker paketi ilə qarşılaşsanız, lütfən, onun linkini @ ünvanına göndərərək bizə bildirin. StickersReportBot
+
+    <i>Unutmayın ki, bot paketlərin məzmununa görə məsuliyyət daşımır və ona nəzarət etmək imkanı yoxdur</i>
+  packs:
+    info: |
+      <b>📁 Paketlər</b>
+    types:
+      regular: Stikerlər
+      custom_emoji: Emojilər
+      inline: İnline
+    empty: |
+      <b>Hələ heç bir paketiniz yoxdur.</b>
+      Yaratmaq üçün /new əmri yazın
+    inline_title: Daxili paket
+    select_group_pack_info: |
+      <b>📁 Paketi seçin</b>
+
+      Paketdən qrupda istifadə etmək üçün inzibatçılar aşağıdakı düyməni istifadə edərək onu seçməlidirlər
+    select_group_pack: Paketi seçin
+  emoji:
+    info: |
+      Cari paket üçün default emojini dəyişdirmək üçün, <code>/emoji</code> yazın və sonra emojiyi bir boşluqla ayıraraq göndərin
+
+      Məsələn - <code>/emoji 🌟</code>
+    done: Emoji uğurla dəyişdirildi.
+    error: Emoji dəyişdirilməsi zamanı xəta baş verdi!
+  round_video:
+    enabled: |
+      Videolar indi dairəvi formada olacaq
+    disabled: |
+      Videoların daha yuvarlaq forması olmayacaq
+  paysupport: |
+    <b>👨‍💻 Ödəniş Dəstəyi</b>
+
+    Botun fəaliyyəti, ödənişlər və ianələrlə bağlı bütün məsələlər üzrə birbaşa olaraq tərtibatçı ilə əlaqə saxlaya bilərsiniz
+
+    <b>Əlaqə:</b>
+    🧑‍💻 Tərtibatçı: @ly_oBot
+donate:
+  menu: |
+    <b>☕️ Bot inkişaf etdirilməsinə dəstək olun</b>
+    Botun inkişafına dəstək verərək, Kredit alacaqsınız
+
+    <b>Balans:</b> <code>${balance}</code> Kreditlər
+    1 Kredit ilə, bir paketi yüksəltmək imkanı var.
+
+    <b>Yüksəltmənin təmin etdiyi üstünlüklər:</b>
+    ➖ Paket adında "<code>${titleSuffix}</code>" yoxdur <i>(linkdə deyil)</i>
+    ➖ Başlıq 64 simvola qədər (35 əvəzinə)
+    ➖ Videolar 35 saniyəyə qədər
+    ➖ Prioritet çevrilmə növbəsi
+    ➖ Eyni zamanda bir neçə stiker
+    ➖ Reklamsız
+
+    <b>Almaq istədiyiniz Kreditlərin miqdarını seçin:</b>
+  btn:
+    donate: '☕️ Bağışlayın'
+  topup: |
+    <b>Almaq istədiyiniz Kreditlərin miqdarını daxil edin:</b>
+  invalid_amount: |
+    <b>Yanlış miqdar</b>
+
+    Ən az miqdar 1 Kreditdir
+  paymenu: |
+    <b>${amount} Kredit</b> üçün <b>${price}$</b> almaq istəyirsiniz
+
+    ⚠️ Kreditlər idarəçi tərəfindən əl ilə verilir.
+    Gözləmə müddəti 5 dəqiqədən 1 saata qədər dəyişir
+
+    <u>Ödəniş üsulunu seçin:</u>
+  description: |
+    Kredit alaraq, botun inkişafına dəstək olursunuz və əlavə funksiyalardan istifadə etmək imkanı əldə edirsiniz
+  update: |
+    <b>🔄 Balansı yenilə</b>
+
+    Balans: <code>${balance}</code> Kredit (əlavə edilib <code>${amount}</code> Kredit)
+  error:
+    already_donated: |
+      Bu ödəniş üçün artıq Kredit almışsınız
+    error: |
+      <b>Xəta!</b>
+      Ödəniş işlənərkən xəta baş verdi
+    canceled: |
+      Ödəniş ləğv edildi
+coedit:
+  info: |
+    <b>👥 Birgə-redaktə</b>
+
+    Birgə-redaktə üçün link <a href="${link}">${title}</a>: <code>${colink}</code>
+
+    <b>Necə istifadə etmək olar:</b>
+    1. Paketə giriş hüququ vermek istədiyiniz şəxsə linki göndərin
+    2. Linkə kliklədikdən sonra, onlar "start" düyməsini basmalı və redaktorlar siyahısına əlavə ediləcəklər
+    3. Redaktor paketdə stikerləri əlavə edə, silə və redaktə edə bilər
+
+    <b>Redaktorlar:</b>
+    ${editors}
+
+    <i>Redaktorları silmək üçün, linki sıfırlamalısınız</i>
+  no_editors: |
+    Hələ redaktor yoxdur
+  btn:
+    send: '📤 Linki göndərin'
+    reset: '🔁 Linki sıfırlayın'
+  share: |
+    Linki izləyin və paketi birgə redaktə etmək üçün "start" düyməsini basın "${title}"
+  reset: |
+    <b>🔁 Link sıfırlandı</b>
+
+    Birgə redaktə üçün yeni keçid <a href="${link}">${title}</a>:
+    <code>${colink}</code>
+callback:
+  pack:
+    answerCbQuer:
+      not_found: Paket tapılmadı
+      not_owner: Bu sizin paketiniz deyil
+      hidden: Paket uğurla gizlədilib
+      restored: Paket uğurla bərpa edildi
+    set_pack: |
+      🌟 Seçilmiş <a href="${link}">${title}</a> paket
+
+      <b>❔ Necə əlavə etmək olar?</b>
+      Paketə əlavə etmək üçün foto, video və ya stiker göndərin
+    set_inline_pack: |
+      Seçilmiş <u>${title}</u> paketi
+
+      İstifadə etmək üçün, hər hansı bir söhbətdə yazın <code>@${botUsername} </code>və boşluq
+      Aşağıdakı düyməni basaraq da istifadə edə bilərsiniz
+    boost:
+      info: |
+        \n⚡ <b><a href="https://t.me/${botUsername}?start=boost">Artırın</a></b>: ${boostStatus}
+      status:
+        on: Aktivdir
+        off: Əlil
+    hidden: Paket <a href="${link}">${title}</a> siyahınızdan gizlədilib.
+    restored: Paket <a href="${link}">${title}</a> siyahınıza bərpa edildi.
+    btn:
+      hide: '❌ Paketi gizlədin'
+      delete: '🗑 Paketi silin'
+      restore: 'Bərpa et'
+      use_pack: '📦 Paketdən istifadə edin'
+      boost: '⚡ Gücləndirin'
+      frame: '🖼 Çərçivə'
+      rename: '✏️ Adını dəyişdirin'
+      search_gif: '🔎 GIF axtarın'
+      coedit: '👥 Birgə redaktə'
+      catalog_add: '🗂 Kataloqa əlavə edin'
+      catalog_edit: '📝 Kataloqda redaktə edin'
+      catalog_delete: '🗑 Kataloqdan silin'
+      catalog_share: '🔗️️ Paylaşın'
+      catalog_open: '📂 Kataloqda açın'
+    error:
+      not_found: |
+        Xəta!
+        Sticker tapılmadı.
+      invalid_png: |
+        Xəta!
+        Fayl düzgün PNG şəkli deyil. Göndərməzdən əvvəl onu PNG formatına çevirin.
+      invalid_dimensions: |
+        Xəta!
+        Stiker ölçüləri qeyri-düzgündür. Stikerlər 512x512 piksel olmalıdır.
+      invalid_animated: |
+        Xəta!
+        Animasiya edilmiş stiker faylı düzgün TGS formatında deyil.
+      invalid_video: |
+        Xəta!
+        Video faylı düzgün WEBM formatında deyil.
+      restore: |
+        Xəta!
+        Paketi bərpa etmək mümkün deyil.
+      copy: |
+        Xəta!
+        Paketi tapmaq mümkün deyil.
+    select_group:
+      success: |
+        Paket <a href="${link}">${title}</a> uğurla qrup üçün seçildi.
+      access_rights:
+        add: Qrup paketinə stickerləri kim əlavə edə bilər?
+        delete: Qrup paketindən stickerləri kim silə bilər?
+        rights:
+          all: Hər kəs
+          admins: Yalnız adminlər
+      error: |
+        Xəta!
+        Yığımı tapılmadı.
+  sticker:
+    answerCbQuery:
+      delete: Stiker paketdən uğurla çıxarıldı.
+      restored: Stiker uğurla cari paketdə saxlanıldı.
+    delete: Stiker paketdən uğurla çıxarıldı.
+    restored: Stiker uğurla cari paketdə saxlanıldı.
+    btn:
+      delete: '🗑 Sil'
+      copy: '🌟 Kopyala'
+      restore: '✅ bərpa edin'
+    error:
+      not_found: |
+        Xəta!
+        Sticker tapılmadı.
+      invalid_png: |
+        <b>Xəta!</b>
+        Fayl etibarlı PNG şəkli deyil. Göndərməzdən əvvəl onu PNG formatına çevirin.
+      invalid_dimensions: |
+        <b>Xəta!</b>
+        Stikerin ölçüləri etibarlı deyil. Stikerlər 512x512 piksel olmalıdır.
+      invalid_animated: |
+        <b>Xəta!</b>
+        Animasiya edilmiş stiker faylı düzgün TGS formatında deyil.
+      invalid_video: |
+        <b>Xəta!</b>
+        Video faylı düzgün WEBM formatında deyil.
+  group_settings:
+    success: |
+      Grup parametrləri uğurla yeniləndi.
+sticker:
+  add:
+    ok: |
+      <b>Uğurla paketə əlavə edildi:</b>
+      <a href="${link}">${title}</a>
+
+      Bir saat ərzində, bu paket bütün istifadəçilər üçün yenilənəcəkdir.
+
+      <i>Stikerə uyğun bir neçə emoji göndərin, əgər onları əlavə etmək istəyirsinizse.</i>
+    ok_inline: |
+      <b>Paketə uğurla əlavə edildi:</b>
+      <u>${title}</u>
+    send_emoji: Əla, indi uyğun olan emoji göndərin
+    converting_process: |
+      <b>Gözləyin...</b>
+      Fayl konversiya növbəsindədir. Tamamlanmasını gözləyin. Bu bir az vaxt ala bilər.
+
+      Gedişat: ${progress} / ${total}
+
+      <i>Botu dəstəkləyən istifadəçilər növbədə prioritet əldə edirlər (daha çox məlumat: /donate)</i>
+    catalog_offer: |
+      <b>😲 Vay, əla paket hazırladın!</b>
+
+      İctimai stikerlər kataloquna <a href="${link}">${title}</a> əlavə etmək istərdiniz ki, botun digər istifadəçiləri də bunu görə bilsin?
+      <i>Çox vaxt tələb etmir</i>
+    quote: |
+      Bu mesajdan sitat yaratmaq üçün @QuotlyBot istifadə edin
+    error:
+      reply: |
+        <b>Xəta!</b>
+        Lütfən, stikerə cavab yazın.
+      no_selected_pack: |
+        <b>Siz paketi seçməmisiniz</b>
+
+        Zəhmət olmasa, paket yaradın (/yeni) və ya (/paketlər) seçin
+      no_selected_group_pack: |
+        <b>Qrup paketi seçməmisiniz</b>
+
+        Zəhmət olmasa, /packs əmrindən istifadə edərək paket seçin
+      no_rights: |
+        <b>Xəta!</b>
+        Bu paketi əlav etmək hüququnuz yoxdur.
+      stickers_too_much: |
+        Bu paketdə stikerlərin maksimum sayı var.
+
+        Siz /new əmrindən istifadə edərək yeni paket yarada bilərsiniz.
+      have_already: |
+        <b>Bu stiker artıq paketdədir</b>
+
+        Emoji dəyişdirmək istəyirsinizsə, onu aşağıdakı mesajda göndərin.
+      stickerset_invalid: |
+        <b>Xəta!</b>
+        Bot cari seçdiyiniz paketə daxil ola bilmir.
+
+        Zəhmət olmasa, (/yeni) yaradın və ya başqa paket seçin (/paketlər).
+      invalid_png: |
+        <b>Xəta!</b>
+        Fayl etibarlı PNG şəkli deyil. Göndərməzdən əvvəl onu PNG formatına çevirin.
+      invalid_dimensions: |
+        <b>Xəta!</b>
+        Stikerin ölçüləri etibarlı deyil. Stikerlər 512x512 piksel olmalıdır.
+      invalid_animated: |
+        <b>Xəta!</b>
+        Animasiya edilmiş stiker faylı düzgün TGS formatında deyil.
+      invalid_video: |
+        <b>Xəta!</b>
+        Video faylı düzgün WEBM formatında deyil.
+      file_type:
+        static: |
+          <b>Xəta!</b>
+          Bu fayl növü dəstəklənmir
+          Bu foto və ya statik stikeri statik paketə əlavə edə bilərsiniz
+
+          <i>Yaradın (/yeni) və ya seçin (/paketlər) başqa paket</i>
+        video: |
+          <b>Xəta!</b>
+          Bu fayl növü dəstəklənmir
+          Siz bu video faylları video paketinə əlavə edə bilərsiniz
+
+          <i>Yaradın (/yeni) və ya seçin (/ paketlər) başqa bir paket</i>
+        animated: |
+          <b>Xəta!</b>
+          Bu fayl növü dəstəklənmir
+          Siz bu cizgi fayllarını vektor paketinə əlavə edə bilərsiniz
+
+          <i>Yaradın (/yeni) və ya seçin (/ paketlər) başqa bir paket</i>
+        unknown: |
+          <b>Xəta!</b>
+          Bu fayl növü dəstəklənmir
+
+          <i>Yaradın (/yeni) və ya başqa paket seçin (/paketlər)</i>
+      wait_load: |
+        <b>Gözləyin!</b>
+
+        Bot hələ də əvvəlki faylı emal edir...
+        Emalın prioritetini artırmaq və növbəyə bir dəfədən artıq stikeri əlavə etmək üçün botun inkişafına dəstək ola bilərsiniz (/donate).
+      timeout: |
+        <b>Hazırda bot böyük yüklə üzləşir</b>
+        Buna görə də, video çevrilmə yalnız aktiv gücləndirici paketlər üçün mövcuddur
+
+        Ətraflı məlumat üçün / bağışla
+      convert: |
+        <b>Xəta!</b>
+        Təəssüf ki, bot videonuzu çevirə bilmədi.
+
+        Ola bilsin ki, videonuz bot üçün anlaşılmaz formatda saxlanılıb. mp4 formatında olduğuna əmin olun.
+        Bu, botun daxili xətası da ola bilər, bu videonu yenidən göndərməyə cəhd edin.
+      too_big: |
+        <b>Xəta!</b>.
+
+        Fayl emal etmək üçün çox böyükdür. Zəhmət olmasa, göndərməzdən əvvəl keyfiyyəti və müddəti azaldın.
+      sticker_not_found: |
+        <b>Səhv!</b>
+
+        Bu stikeri tapmaq mümkün olmadı. Zəhmət olmasa onun doğru paketdə olub-olmadığını yoxlayın və ya yenidən əlavə etməyə çalışın.
+news:
+  join: |
+    ℹ️ <a href="${link}">Bot haqqında ən son xəbərləri əldə etmək üçün</a> kanalımıza qoşulun.
+
+    <i>Bot haqqında ən son xəbərləri, həmçinin yeniləmələri və yeni funksiyaları əldə etmək üçün kanala abunə olun.</i>
+  join_btn: '📢 Kanala qoşulun'
+  not_joined: '🙅 Siz kanala abunə deyilsiniz'
+  continue: '✅ Davam edin'
+userAbout:
+  help: |
+    <b>🧑‍🎨 İstifadəçi haqqında</b>
+
+    Bu menyudan istifadə etməklə siz istifadəçi və onun stiker paketləri haqqında məlumat əldə edə bilərsiniz
+
+    İstifadəçi haqqında məlumat əldə etmək üçün düymədən istifadə edin aşağıda və ya mesajını yönləndirin
+  result: |
+    <b>🧑‍🎨 İstifadəçi məlumatı</b>
+    <b>🆔 İstifadəçi ID-si:</b> <code>${userId}</code>
+    <b>🎨 Bu istifadəçidən paketlər:</b>
+    ${packs}
+  no_packs: |
+    <i>Bu sahibin stikerləri haqqında məlumatımız yoxdur</i>
+  forward_hidden: |
+    İstifadəçi mesajları yönləndirmək imkanını gizlədib. Onun stiker paketlərinə baxmaq üçün aşağıdakı düymədən istifadə edin.
+  select_user: '🧑‍🎨 İstifadəçi seçin'
+scenes:
+  new_pack:
+    pack_type: |
+      <b><u>Paket növünü seçin</u></b>
+    regular: '😊 Etiket'
+    custom_emoji: '🌟 Emoji (mükafat)'
+    static: '🌟 Statik'
+    animated: '✨ Vektor'
+    video: '📹 Video'
+    pack_format: |
+      <b><u>Paket növünü seçin</u></b>
+
+      <b>Ümumi</b> - statik (hərəkət etməyin), rastr, fayl format - PNG əlavə etməzdən əvvəl (bot emal olunur), əlavə etdikdən sonra - WEBP.
+      Adi paketin nümunəsi - t.me/addstickers/Animals
+
+      <b>Video</b> - animasiya video paketi. İstənilən video, gif və foto əlavə edə bilərsiniz.
+      Nümunə video paketi - t.me/addstickers/TheMascot
+
+      <b>Animasiyalı</b> - animasiyalı, vektor (onlarda faylın daxilində olan obyektlərin dəqiq təsviri var. hər hansı bir miqyasda aydın şəkildə göstərildiyi), fayl formatı - TGS, Lottie formatının bir variasiyası.
+      Animasiya paketinə nümunə - t.me/addstickers/IsabelleShizue
+
+      <i>Animasiyalı və video stiker dəstlərində 50-yə qədər stiker ola bilər. Statik stiker dəstlərində 120-yə qədər stiker ola bilər.</i>
+    pack_title: |
+      <b>Yeni stiker paketi üçün bir ad daxil edin:</b>
+      <i>Aşağıda təsadüfi olaraq yaradılan bir ad da seçə bilərsiniz.</i>
+    pack_name: |
+      <b>Yeni stikerlər paketi üçün qısa link daxil edin:</b>
+
+      <i>Məsələn, bu paket qısa link kimi "Heyvanlar"dan istifadə edir: https://t.me/ addstickers/<u>Heyvanlar</u></i>
+      <i>Düymədə təsadüfi qısa keçid seçə bilərsiniz.</i>
+    ok: |
+      Paket <a href="${link}">${title}</a> uğurla yaradıldı!
+
+      <b>Paket linki:</b> <pre>${link}</pre>
+
+      Fayl, foto, video və ya stiker göndərin ki, mən dəstinizə əlavə edin
+    error:
+      title_long: Ad ${max} simvoldan çox olmamalıdır
+      name_long: Ünvan ${max} simvoldan çox olmamalıdır.
+      telegram:
+        name_invalid: Bu ünvan istifadə edilə bilməz.
+        name_occupied: Bu ünvan artıq alınmışdır.
+        upload_failed: |
+          <b>Xəta!</b>
+          Bot Telegram-a stiker yükləyə bilməz.
+
+          Zəhmət olmasa, sonra yenidən cəhd edin.
+  copy:
+    enter: |
+      Mən onu kopyalaya bilərəm, amma bundan əvvəl yeni paket yaradaq
+    progress: |
+      <a href="${originalLink}">${originalTitle}</a>-dan <a href="${link}">${title}</a>-a paketi kopyalamaq
+
+      Proqres: ${current}/${total}
+    done: |
+      Paketin <a href="${originalLink}">${originalTitle}</a> -dən <a href="${link}">${title}</a> -ə kopyalanması uğurla tamamlandı.
+    pay: |
+      <b>Paketin çevrilməsi</b>
+
+      Bir paketi bir növdən digərinə çevirmək 1 kreditə başa gəlir
+
+      <b>Cari balans:</b> ${balance} Kredit
+
+      Kredit almaq: /donate
+    pay_btn: '✅ Təsdiqlə'
+    error:
+      premium: |
+        <b>səhv!</b>
+        Təəssüf ki, bu xüsusiyyət yalnız botu dəstəkləyənlər üçün mövcuddur.
+
+        You can do this by sending the /donate command.
+  original:
+    enter: |
+      Bu bot vasitəsilə əlavə olunan stikeri göndərin, sizə orijinalını göstərim.
+    error:
+      not_found: |
+        <b>səhv!</b>
+        Bu stikerin əslini tapa bilmədim.
+  delete:
+    enter: |
+      Bu bot vasitəsilə əlavə edilmiş stiker göndərin, mən onu paketdən siləcəyəm.
+    confirm: |
+      Bu stikeri silmək istədiyinizə əminsiniz?
+    error:
+      not_found: |
+        <b>Xəta!</b>
+        Stikeri tapa bilmədim.
+  rename:
+    enter_name: |
+      <b> <a href="${link}">${title}</a>üçün yeni başlıq daxil edin:</b>
+    success: |
+      <b>Başlıq uğurla dəyişdirildi!</b>
+
+      Yeni başlıq: <a href="${link}">${title}</a>
+    boost_notice: |
+      ❕ "<code>${titleSuffix}</code>" sonluğunu aradan qaldırmaq üçün paketi yüksəltməlisiniz. Daha ətraflı məlumat üçün menyuda: \/donate
+  packAbout:
+    enter: |
+      <b>Bu barədə məlumat axtarmaq üçün mənə stiker və ya fərdi emoji göndərin:</b>
+    not_found: |
+      Stikeri tapa bilmədim
+    result: |
+      <b>📦 Paket:</b> <a href="${link}">${name}</a>
+      🆔 <code>${setId}</code> <i>(Sahibin paketləri üçün unikal nömrə, hər paket üçün artır)</i>
+
+      🧑‍🎨 Sahibin ID-i: <code>${ownerId}</code>
+      ${mention}
+
+      <b>🎨 Sahibin digər paketləri:</b>
+      ${otherPacks}
+    no_other_packs: |
+      <i>Bu sahibin digər stikerləri haqqında məlumatımız yoxdur</i>
+  boost:
+    sure: |
+      <b>Əminsiniz ki, <a href="${link}">${title}</a> paketini yüksəltmək istəyirsiniz?</b>
+
+      Yüksəltmə emal üstünlüyünü və emal növbəsinə birdən çox stiker əlavə etmək imkanını artırır
+      Yüksəltmə haqqında daha ətraflı məlumatı menyuda /donate komandasını göndərərək tapa bilərsiniz
+
+      <b>Qiymət:</b> 1 Kredit
+      <b>Cari balans:</b> ${balance} Kredit
+    btn:
+      yes: Bəli, gücləndirin!
+      no: Xeyr, ləğv edin
+    canceled: |
+      Artırma ləğv edildi
+    success: |
+      Artırma uğurla tamamlandı!
+
+      ${title} indi gücləndirilib
+    error:
+      not_enough_credits: |
+        Bu paketi yüksəltmək üçün kifayət qədər Kreditiniz yoxdur.
+
+        Balansınızı artırmaq üçün /donate komandasını göndərə bilərsiniz.
+      already_boosted: |
+        Bu paket artıq gücləndirilib.
+  catalog:
+    publish:
+      publish_new: |
+        👌 <b>Mənə dərc etmək istədiyiniz paketdən stiker göndərin</b>
+
+        <i>Sizə məxsus istənilən paketi dərc edə bilərsiniz, hətta başqa yerlərdə yaradılsalar belə</i>
+      owner_proof: |
+        <b>Bu paketin sahibliyini yoxlamaq üçün bir neçə sadə addımı yerinə yetirməlisiniz:</b>
+        1. @Stickers botunu açın
+        2. Göndər <code>/packstats</code> əmri
+        3. Lazım olan paketi tapın və seçin
+        4. Alınan mesajı bota yönləndirin
+      publish_new_access_denied: |
+        <b>Xəta!</b>
+        Bu paket sizin deyil.
+
+        Siz yalnız öz paketlərinizi dərc edə bilərsiniz
+      banned: |
+        <b>Xəta!</b>
+        Sizə bu funksiyadan istifadə qadağan olunub.
+        Zəhmət olmasa, administratorla əlaqə saxlayın.
+      enter: |
+        Siz "<a href="${link}">${title}</a>" paketini botun ictimai kataloqunda dərc etmək üzrəsiniz
+        Onu botun istənilən istifadəçisi ad, teq və ya filtrlə tapa bilər.
+        Buna görə daha çox insan paketinizi quraşdıracaq
+        Çox sayda insan üçün maraqlı ola biləcək yalnız yüksək keyfiyyətli paketləri göndərməyə çalışın
+
+        <b>Qaydalar paketlərin nəşri üçün:</b>
+        • Dar bir dairə üçün nəzərdə tutulmuş şəxsi paketlərinizi dərc etməyin. Məsələn, dostlarınızın üzləri və ya mesajlarınızdan sitatlar
+        • Aİ qanunlarını və ya digər yerli qanunları pozan stiker təzyiqləri dərc etməyin
+
+        Bunun olması üçün əlavə məlumat təqdim etməlisiniz. kataloqunda dərc edilmişdir
+      continue_button: Davam et
+      enter_description: |
+        <b>Paketinizi qısaca təsvir edin ki, başqaları onu tapa bilsin</b>
+
+        <i>Siz həmçinin [#]</i>
+        kateqoriyalara ayırmaq üçün hashtaglardan istifadə edə bilərsiniz.<i>Məsələn: #anime #meme #heyvanlar #cute #kpop #funny #cat #oyun </i>
+      select_language: |
+        <b>Paketinizin hansı dillər üçün olduğunu seçin:</b>
+        <i>Siz çoxlu dil seçə bilərsiniz</i>
+      button_all_languages: Bütün dillər
+      button_confirm_language: Təsdiq edin
+      set_safe: |
+        <b>Paketiniz istifadəçilər üçün təhlükəsizdirmi?</b>
+        <i>Yəni erotik və digər şokedici məzmun yoxdur</i>
+      button_safe:
+        safe: Bəli, bu təhlükəsizdir
+        not_safe: Xeyr, bu təhlükəsiz deyildir
+      no_tags: müəyyən edilməmişdir
+      confirm: |
+        <b>"<a href="${link}">${title}</a>" paketinin dərc olunmasını təsdiqləyin</b>
+
+        <b>Təsvir:</b> <i>${description}</i>
+
+        <b>Teqlər:</b> ${tags}
+        <b>Dillər:</b> ${languages}
+      button_confirm: '✅ Nəşri təsdiqləyin'
+      success: |
+        Təbrik edirik, paketiniz digər istifadəçilərin tapa biləcəyi botumuzun ümumi kataloqunda dərc olundu!
+
+        Siz /packs əmri ilə paketi seçməklə paket axtarış məlumatını redaktə edə bilərsiniz.
+
+        <i>Sizə xatırladırıq ki, paketinizin statistikasına @Stickers rəsmi botu vasitəsilə baxmaq olar</i>
+    unpublish:
+      success: |
+        Paket bot kataloqundan müvəffəqiyyətlə dərc edilib.
+  delete_pack:
+    enter: |
+      Paketi silmək istədiyinizə əminsiniz <a href="${link}">${title}</a>?
+      O, həmişəlik silinəcək və bərpa edilə bilməz.
+
+      Yalnız bir stiker silmək istəyirsinizsə, /delete əmrindən istifadə edin.
+
+      Bu paketi həqiqətən silmək istədiyinizi təsdiqləmək üçün <code>${confirm}</code> göndərin.
+    confirm: Bəli, tam əminəm.
+    success: |
+      <b>Paket uğurla silindi!</b>
+    error:
+      - <b>Xəta!</b>
+      - Təəssüf ki, nəsə xəta baş verdi.
+  frame:
+    no_video: |
+      <b>Xəta!</b>
+      Siz yalnız video paketlərə çərçivələr əlavə edə bilərsiniz.
+    select_type: |
+      <a href="${example}">&#8203;</a><b>Çərçivə tipini seçin:</b>
+      Çərçivə stikerin ətrafında şəffaf fon deməkdir
+
+      <code>lite</code> — künclər bir az kəsiləcək
+      <code>medium</code> — künclər daha çox kəsiləcək
+      <code>rounded</code> — künclər yuvarlaq ediləcək
+      <code>square</code> — çərçivənin düzbucaqlı forması, yəni, heç bir dəyişiklik olmayacaq
+      <code>circle</code> — çərçivə dairəvi formada olacaq
+
+      <i>Gələcəkdə, /frame əmrindən çərçivə tipini təyin etmək üçün istifadə edə bilərsiniz</i>
+    types:
+      lite: '1. Lite'
+      medium: '2. Orta'
+      rounded: '3. Dairəvi'
+      square: '4. Kvadrat'
+      circle: '5. Dairə'
+    selected: |
+      <b>Seçilmiş çərçivə növü:</b> ${type}
+  photoClear:
+    enter: |
+      Arxa fonu silmək istədiyiniz <u>şəkli</u> göndərin və mən faylı fonsuz göndərim
+
+      <i>Fotolarla ən yaxşı işləyir. Rəsmlər, illüstrasiyalar və s. ilə daha pis işləyir.</i>
+    enter_anime: |
+      Arxa fonunu silmək istədiyiniz <u>şəkil</u> göndərin və mən sizə arxa fonu olmayan faylı göndərəcəyəm
+
+      <i>Anime şəkilləri ilə daha yaxşı işləyir</i>
+    choose_model: |
+      <b>Model seçin:</b>
+    web_app: WebApp - insanlarla fotoşəkillər üçün
+    model:
+      ordinary: Ümumi — insanlarla fotoşəkillər üçün
+      general: Ümumi — istənilən fotoşəkillər üçün
+      anime: Anime — anime şəkilləri üçün
+      birefnet_general: BirefNet - istənilən fotoşəkillər üçün
+    add_to_set_btn: '🌟 Dəstə əlavə edin'
+    error: |
+      <b>Xəta!</b>
+      Təəssüf, nəsə xəta baş verdi.
+  leave: |
+    Fəaliyyət uğurla ləğv edildi.
+  btn:
+    cancel: '❌ Ləğv et'
+error:
+  telegram: |
+    <b>Telegram xəta!</b>
+    <code>${error}</code>
+  answerCbQuery:
+    telegram: |
+      Telegram xəta qaytardı:
+      ${error}
+  banned: |
+    <b>Xəta!</b>
+    Sizə bu funksiyadan istifadə qadağan olunub.
+
+    <i>Bu bir səhv olduğunu düşünürsünüzsə, administratorla əlaqə saxlayın: @ly_oBot</i>
+  unknown: |
+    <b>Naməlum xəta baş verdi, zəhmət olmasa yenidən cəhd edin.</b>
+
+    Problem davam edərsə @Ly_oBot-a yazın.
+    Zəhmət olmasa, hansı bot barədə danışdığınızı və problemi bir mesajda ətraflı şəkildə təsvir edin.
